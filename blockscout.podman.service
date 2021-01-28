@@ -1,0 +1,28 @@
+# Generated using `podman generate systemd`
+# Install instructions: http://docs.podman.io/en/latest/markdown/podman-generate-systemd.1.html#installation-of-generated-systemd-unit-files
+[Unit]
+Description=Podman blockscout.service
+Documentation=man:podman-generate-systemd(1)
+Wants=network.target
+After=network-online.target
+
+[Service]
+Environment=PODMAN_SYSTEMD_UNIT=%n
+Environment="NETWORK=TEST"
+Environment="ETHEREUM_JSONRPC_HTTP_URL=http://localhost:8545"
+Environment="ETHEREUM_JSONRPC_TRACE_URL=http://localhost:8545"
+Environment="ETHEREUM_JSONRPC_VARIANT=parity"
+Environment="DATABASE_URL=postgresql://blockscout:blockscout@localhost:5432/blockscout"
+Environment="SECRET_KEY_BASE=VTIB3uHDNbvrY0+60ZWgUoUBKDn9ppLR8MI4CpRz4/qLyEFs54ktJfaNT6Z221No"
+Environment="ECTO_USE_SSL=false"
+Restart=on-failure
+ExecStartPre=/bin/rm -f %t/blockscout.pid %t/blockscout.ctr-id
+ExecStart=/usr/bin/podman run --conmon-pidfile %t/blockscout.pid --cidfile %t/blockscout.ctr-id --cgroups=no-conmon -d --network=host -e NETWORK -e ETHEREUM_JSONRPC_HTTP_URL -e ETHEREUM_JSONRPC_TRACE_URL -e ETHEREUM_JSONRPC_VARIANT -e DATABASE_URL -e SECRET_KEY_BASE -e ECTO_USE_SSL pbesson/blockscout:v3.4.0-beta
+ExecStop=/usr/bin/podman stop --ignore --cidfile %t/blockscout.ctr-id -t 10
+ExecStopPost=/usr/bin/podman rm --ignore -f --cidfile %t/blockscout.ctr-id
+PIDFile=%t/blockscout.pid
+KillMode=none
+Type=forking
+
+[Install]
+WantedBy=multi-user.target default.target

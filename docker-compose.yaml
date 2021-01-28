@@ -1,0 +1,25 @@
+version: '3'
+services:
+  blockscout:
+    image: pbesson/blockscout:v3.4.0-beta
+    environment:
+      - NETWORK=TEST
+      - SUBNETWORK=test-1
+      - ETHEREUM_JSONRPC_HTTP_URL=http://localhost:8545
+      - ETHEREUM_JSONRPC_TRACE_URL=http://localhost:8545
+      #- ETHEREUM_JSONRPC_WS_URL=http://localhost:8546
+      - ETHEREUM_JSONRPC_VARIANT=parity
+      - DATABASE_URL=postgresql://blockscout:blockscout@localhost:5432/blockscout
+      - SECRET_KEY_BASE=VTIB3uHDNbvrY0+60ZWgUoUBKDn9ppLR8MI4CpRz4/qLyEFs54ktJfaNT6Z221No
+      - ECTO_USE_SSL=false
+    ports:
+      - 4000:4000 # JSON-RPC
+    network_mode: "host"
+  postgres:
+    image: postgres:12
+    environment:
+      - POSTGRES_PASSWORD=blockscout
+      - POSTGRES_USER=blockscout
+    ports:
+      - 5432:5432
+    network_mode: "host"

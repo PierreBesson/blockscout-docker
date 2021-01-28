@@ -1,15 +1,10 @@
 # Blockscout Docker image
-
-[![](https://images.microbadger.com/badges/version/ulamlabs/blockscout.svg)](https://microbadger.com/images/ulamlabs/blockscout "Get your own version badge on microbadger.com")
-
-Docker image for Blockscout app.
-
-GitHub Repository is available at [ulamlabs/blockscout-docker](https://github.com/ulamlabs/blockscout-docker).
-
 ## Building
 
+Set the Blockscout version you want in the Dockerfile `ENV VERSION`. The list of versions is available on [Blockscout Github's release page](https://github.com/poanetwork/blockscout/tags)
+
 ```console
-$ docker build -t ulamlabs/blockscout:latest .
+docker build -t pbesson/blockscout:VERSION .
 ```
 
 ## Usage
@@ -17,6 +12,10 @@ $ docker build -t ulamlabs/blockscout:latest .
 Docker image supports the same environment variables as Blockscout app itself. Use [documentation](https://docs.blockscout.com/for-developers/information-and-settings/env-variables) for reference.
 
 ```console
-$ docker run -p 4000:4000 ulamlabs/blockscout:latest
+docker-compose up -d
 ```
+
+# Credits
+
+Thanks to Ulamlabs and [Maciej Janiszewski](https://github.com/ksiazkowicz) for the initial version of this Dockerfile.
 
